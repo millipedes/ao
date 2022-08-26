@@ -17,15 +17,17 @@
  * This struct is used to manage the memory of each process stack frame.
  */
 typedef struct SYMBOL_TABLE_T {
-  /** list of user defined variables */
+  /** List of user defined variables. */
   variable ** udv;
+  /** The previous process stack frame. */
   struct SYMBOL_TABLE_T * previous;
-  /** quantity of user defined variables */
+  /** Quantity of user defined variables. */
   int qty_udv;
 } symbol_table;
 
 symbol_table * init_symbol_table(void);
-int find_varible(symbol_table * st, const char * name);
+int find_variable(symbol_table * st, const char * name);
+void add_variable(symbol_table * st, variable * var);
 void free_symbol_table(symbol_table * st);
 
 #endif

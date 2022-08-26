@@ -1,3 +1,12 @@
+/**
+ * @file   variable.h
+ * @brief  This file contains the function defintions for the variable.c file.
+ * structure.
+ * @author Matthew C. Lindeman
+ * @date   August 25, 2022
+ * @bug    None known
+ * @todo   Nothing
+ */
 #ifndef VAR_H
 #define VAR_H
 
@@ -14,6 +23,7 @@ typedef struct VARIABLE_T {
 } variable;
 
 variable * init_variable(char * name, char * literal, var_type vt);
+void variable_dump_debug(variable * var);
 void free_variable(variable * var);
 
 #endif

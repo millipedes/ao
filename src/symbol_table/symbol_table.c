@@ -31,7 +31,7 @@ symbol_table * init_symbol_table(void) {
  * @return  -1 - The variable was not found.
  *           i - The variable was found at index i.
  */
-int find_varible(symbol_table * st, const char * name) {
+int find_variable(symbol_table * st, const char * name) {
   for(int i = 0; i < st->qty_udv; i++)
     if(!strncmp(st->udv[i]->name, name, MAX_TOK_LEN))
       return i;
@@ -39,9 +39,10 @@ int find_varible(symbol_table * st, const char * name) {
 }
 
 /**
- * This function adds a variable to the symbol_table
- * @param
- * @return
+ * This function adds a variable to the symbol_table.
+ * @param   st - The symbol_table for the given process stack.
+ * @param  var - The variable to be added to the symbol_table.
+ * @return N/a
  */
 void add_variable(symbol_table * st, variable * var) {
   st->qty_udv++;
@@ -62,9 +63,11 @@ void free_symbol_table(symbol_table * st) {
     if(st->udv) {
       for(int i = 0; i < st->qty_udv; i++)
         if(st->udv[i])
-          free(st->udv[i]);
+          free_variable(st->udv[i]);
       free(st->udv);
     }
+    if(st->previous)
+      free_symbol_table(st->previous);
     free(st);
   }
 }

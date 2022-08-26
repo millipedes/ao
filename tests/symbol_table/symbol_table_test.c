@@ -6,7 +6,12 @@
 #include "../symbol_table/include/variable.h"
 #include "../symbol_table/include/var_type.h"
 
-int main(void) {
+/**
+ * This function tests the cases in which a symbol_table can be initialized.
+ * @param  N/a
+ * @return N/a
+ */
+symbol_table_test(void) {
   symbol_table * st = init_symbol_table();
   add_variable(st, init_variable("x", "1.2", DOUBLE));
   add_variable(st, init_variable("y", "some string", STRING));
@@ -18,16 +23,4 @@ int main(void) {
   variable_dump_debug(st->udv[j]);
   variable_dump_debug(st->udv[k]);
   free_symbol_table(st);
-  // lexer * lex = init_lexer("(123 + 123) * 123.123\n");
-  // token_stack * ts = lex_source(lex);
-  // token_stack * rev = reverse_stack(&ts);
-  // ast * abstree = parse_expression(&rev);
-  // ast_dump_debug(abstree);
-  // free_ast(abstree);
-  // while(rev)
-  //   rev = pop_token(rev);
-  // while(ts)
-  //   ts = pop_token(ts);
-  // free_lexer(lex);
-  return 0;
 }

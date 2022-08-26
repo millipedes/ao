@@ -25,13 +25,26 @@ variable * init_variable(char * name, char * literal, var_type vt) {
   var->name = calloc(name_len + 1, sizeof(char));
   var->literal = calloc(literal_len + 1, sizeof(char));
   strncpy(var->name, name, name_len);
-  strncpy(var->literal, literal, vt);
+  strncpy(var->literal, literal, literal_len);
   // If there is a numeric qty to the variable, record it otherwise make it 0
   if(vt == DOUBLE || vt == INT)
     var->numeric_qty = atof(literal);
   else
     var->numeric_qty = 0;
   return var;
+}
+
+/**
+ * This function is used in debugging the variable data structure.
+ * @param var - The variable to be debugged.
+ * @return N/a
+ */
+void variable_dump_debug(variable * var) {
+  printf("Variable\n");
+  printf("Name: `%s`\n", var->name);
+  printf("Literal: `%s`\n", var->literal);
+  printf("Numeric Qty: %f\n", var->numeric_qty);
+  printf("--\n");
 }
 
 /**
