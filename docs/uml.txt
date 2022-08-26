@@ -1,0 +1,86 @@
+@startuml
+package lexer {
+  class lexer {
+     {field} + src : char *
+     {field} + curr_index : int
+     {field} + c : char
+    {method} + lexer * init_lexer(char *)
+    {method} + token_stack * lex_source(lexer *)
+    {method} + token * lex_next_token(lexer *)
+    {method} + token * lex_number(lexer *)
+    {method} + token * lex_word(lexer *)
+    {method} + void lex_advance(lexer *)
+    {method} + void lex_whitespace(lexer *)
+    {method} + void free_lexer(lexer *)
+  }
+}
+
+package token {
+  class token {
+     {field} + t_literal : char *
+     {field} + type : token_type
+    {method} + token * init_token(char *, token_type)
+    {method} + void token_dump_debug(token *)
+    {method} + void free_token(token *)
+  }
+
+  class token_stack {
+     {field} + current : token_stack *
+     {field} + prev : token_stack *
+    {method} + token_stack * init_token_stack(token *)
+    {method} + token_stack * push_token(token_stack *, token *)
+    {method} + void token_stack_dump_debug(token_stack *)
+    {method} + token_stack * reverse_stack(token_stack **)
+    {method} + token_stack * pop_token(token_stack *)
+  }
+
+  class token_type {
+     TOKEN_VAR
+     TOKEN_FILE_NAME
+     TOKEN_INT
+     TOKEN_DOUBLE
+     TOKEN_PLUS
+     TOKEN_MINUS
+     TOKEN_MULT
+     TOKEN_DIV
+     TOKEN_L_PAREN
+     TOKEN_R_PAREN
+     TOKEN_COMMA
+     TOKEN_SUCH_THAT
+     TOKEN_POWER
+     TOKEN_SIN
+     TOKEN_COS
+     TOKEN_TAN
+     TOKEN_ARC_SIN
+     TOKEN_ARC_COS
+     TOKEN_ARC_TAN
+     TOKEN_LOG
+     TOKEN_NEWLINE
+     {method} + const char * token_type_to_string(token_type)
+  }
+}
+
+package parser {
+  class abstract_syntax_tree {
+  }
+
+  class parser {
+  }
+}
+
+package symbol_table {
+  class symbol_table {
+  }
+}
+
+token_stack o--> token
+token       o--> token_type
+
+lexer --> token_stack
+lexer --> token
+
+parser --> lexer
+parser --> abstract_syntax_tree
+parser --> token_stack
+
+@enduml
