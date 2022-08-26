@@ -11,10 +11,11 @@
 
 #include <math.h>
 #include "abstract_syntax_tree.h"
+#include "../../symbol_table/include/symbol_table.h"
 
-ast * parse_expression(token_stack ** ts);
-ast * parse_term(token_stack ** ts);
-ast * parse_factor(token_stack ** ts);
+ast * parse_expression(token_stack ** ts, symbol_table ** st);
+ast * parse_term(token_stack ** ts, symbol_table ** st);
+ast * parse_factor(token_stack ** ts, symbol_table ** st);
 ast * binary_tree(ast * parent, ast * left_child, ast * right_child);
 ast * unary_tree(ast * parent, ast * child);
 ast * simplify_tree(ast * abstree);

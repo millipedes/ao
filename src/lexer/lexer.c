@@ -57,6 +57,33 @@ token * lex_next_token(lexer * l) {
     return lex_number(l);
 
   switch(l->c) {
+    case '=':
+      if(l->src[l->curr_index + 1] == '=') {
+        lex_advance(l);
+        lex_advance(l);
+        return init_token("==", TOKEN_EQUALITY);
+      } else {
+        lex_advance(l);
+        return init_token("=", TOKEN_ASSIGN);
+      }
+    case '>':
+      if(l->src[l->curr_index + 1] == '=') {
+        lex_advance(l);
+        lex_advance(l);
+        return init_token(">=", TOKEN_GT_EQ);
+      } else {
+        lex_advance(l);
+        return init_token(">", TOKEN_GT);
+      }
+    case '<':
+      if(l->src[l->curr_index + 1] == '=') {
+        lex_advance(l);
+        lex_advance(l);
+        return init_token("<=", TOKEN_LT_EQ);
+      } else {
+        lex_advance(l);
+        return init_token("<", TOKEN_LT);
+      }
     case '(':
       lex_advance(l);
       return init_token("(", TOKEN_L_PAREN);

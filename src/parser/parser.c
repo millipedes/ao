@@ -15,20 +15,44 @@
  * @param  tok_list - the token stack to be parsed
  * @return       .\ - the abstract syntax tree of the expression
  */
-ast * parse_expression(token_stack ** ts) {
+ast * parse_expression(token_stack ** ts, symbol_table ** st) {
   ast * left_child = NULL;
   ast * right_child = NULL;
   if(ts[0]) {
-    left_child = parse_term(ts);
+    left_child = parse_term(ts, st);
     switch(ts[0]->current->type) {
       case TOKEN_PLUS:
         ts[0] = pop_token(ts[0]);
-        right_child = parse_expression(ts);
+        right_child = parse_expression(ts, st);
         return binary_tree(init_ast("+", TOKEN_PLUS), left_child, right_child);
       case TOKEN_MINUS:
         ts[0] = pop_token(ts[0]);
-        right_child = parse_expression(ts);
+        right_child = parse_expression(ts, st);
         return binary_tree(init_ast("-", TOKEN_MINUS), left_child, right_child);
+      case TOKEN_ASSIGN:
+        ts[0] = pop_token(ts[0]);
+        right_child = parse_expression(ts, st);
+        return binary_tree(init_ast("=", TOKEN_ASSIGN), left_child, right_child);
+      case TOKEN_EQUALITY:
+        ts[0] = pop_token(ts[0]);
+        right_child = parse_expression(ts, st);
+        return binary_tree(init_ast("==", TOKEN_EQUALITY), left_child, right_child);
+      case TOKEN_GT_EQ:
+        ts[0] = pop_token(ts[0]);
+        right_child = parse_expression(ts, st);
+        return binary_tree(init_ast(">=", TOKEN_GT_EQ), left_child, right_child);
+      case TOKEN_GT:
+        ts[0] = pop_token(ts[0]);
+        right_child = parse_expression(ts, st);
+        return binary_tree(init_ast(">", TOKEN_GT), left_child, right_child);
+      case TOKEN_LT_EQ:
+        ts[0] = pop_token(ts[0]);
+        right_child = parse_expression(ts, st);
+        return binary_tree(init_ast("<=", TOKEN_LT_EQ), left_child, right_child);
+      case TOKEN_LT:
+        ts[0] = pop_token(ts[0]);
+        right_child = parse_expression(ts, st);
+        return binary_tree(init_ast("<", TOKEN_LT), left_child, right_child);
       case TOKEN_R_PAREN:
       case TOKEN_VAR:
       case TOKEN_INT:
@@ -51,11 +75,11 @@ ast * parse_expression(token_stack ** ts) {
  * @param  ts - the token stack from which the term is read
  * @return .\ - the appropriate abstract syntrax tree to model the input
  */
-ast * parse_term(token_stack ** ts) {
+ast * parse_term(token_stack ** ts, symbol_table ** st) {
   ast * left_child = NULL;
   ast * right_child = NULL;
   if(ts[0]) {
-    left_child = parse_factor(ts);
+    left_child = parse_factor(ts, st);
     switch(ts[0]->current->type) {
       case TOKEN_VAR:
       case TOKEN_INT:
@@ -63,11 +87,11 @@ ast * parse_term(token_stack ** ts) {
         return left_child;
       case TOKEN_MULT:
         ts[0] = pop_token(ts[0]);
-        right_child = parse_term(ts);
+        right_child = parse_term(ts, st);
         return binary_tree(init_ast("*", TOKEN_MULT), left_child, right_child);
       case TOKEN_DIV:
         ts[0] = pop_token(ts[0]);
-        right_child = parse_term(ts);
+        right_child = parse_term(ts, st);
         return binary_tree(init_ast("/", TOKEN_DIV), left_child, right_child);
       default:
         return left_child;
@@ -83,7 +107,7 @@ ast * parse_term(token_stack ** ts) {
  * @param   ts - the token stack to be parsed
  * @return tmp - the new abstract syntax tree from the factor
  */
-ast * parse_factor(token_stack ** ts) {
+ast * parse_factor(token_stack ** ts, symbol_table ** st) {
   ast * tmp = NULL;
   ast * right_child = NULL;
   switch(ts[0]->current->type) {
@@ -95,17 +119,17 @@ ast * parse_factor(token_stack ** ts) {
       if(ts[0]->current->type != TOKEN_POWER)
         return tmp;
       ts[0] = pop_token(ts[0]);
-      right_child = parse_factor(ts);
+      right_child = parse_factor(ts, st);
       return binary_tree(init_ast("^", TOKEN_POWER), tmp, right_child);
     case TOKEN_L_PAREN:
       ts[0] = pop_token(ts[0]);
-      tmp = parse_expression(ts);
+      tmp = parse_expression(ts, st);
       if(ts[0]->current->type == TOKEN_R_PAREN) {
         ts[0] = pop_token(ts[0]);
         if(ts[0]->current->type != TOKEN_POWER)
           return tmp;
         ts[0] = pop_token(ts[0]);
-        right_child = parse_factor(ts);
+        right_child = parse_factor(ts, st);
         return binary_tree(init_ast("^", TOKEN_POWER), tmp, right_child);
       } else {
         fprintf(stderr, "[PARSER4]: UnMatched Parenthesis\nExiting\n");
@@ -113,31 +137,31 @@ ast * parse_factor(token_stack ** ts) {
       }
     case TOKEN_SIN:
       ts[0] = pop_token(ts[0]);
-      right_child = parse_factor(ts);
+      right_child = parse_factor(ts, st);
       return unary_tree(init_ast("sin", TOKEN_SIN), right_child);
     case TOKEN_COS:
       ts[0] = pop_token(ts[0]);
-      right_child = parse_factor(ts);
+      right_child = parse_factor(ts, st);
       return unary_tree(init_ast("cos", TOKEN_COS), right_child);
     case TOKEN_TAN:
       ts[0] = pop_token(ts[0]);
-      right_child = parse_factor(ts);
+      right_child = parse_factor(ts, st);
       return unary_tree(init_ast("tan", TOKEN_TAN), right_child);
     case TOKEN_ARC_SIN:
-      ts[0] = pop_token(ts[0]);
-      right_child = parse_factor(ts);
+      ts[0] = pop_token(ts[0]); 
+      right_child = parse_factor(ts, st);
       return unary_tree(init_ast("arcsin", TOKEN_ARC_SIN), right_child);
     case TOKEN_ARC_COS:
-      ts[0] = pop_token(ts[0]);
-      right_child = parse_factor(ts);
+      ts[0] = pop_token(ts[0]); 
+      right_child = parse_factor(ts, st);
       return unary_tree(init_ast("arccos", TOKEN_ARC_COS), right_child);
     case TOKEN_ARC_TAN:
-      ts[0] = pop_token(ts[0]);
-      right_child = parse_factor(ts);
+      ts[0] = pop_token(ts[0]); 
+      right_child = parse_factor(ts, st);
       return unary_tree(init_ast("arctan", TOKEN_ARC_TAN), right_child);
     case TOKEN_LOG:
-      ts[0] = pop_token(ts[0]);
-      right_child = parse_factor(ts);
+      ts[0] = pop_token(ts[0]); 
+      right_child = parse_factor(ts, st);
       return unary_tree(init_ast("log", TOKEN_LOG), right_child);
     default:
       fprintf(stderr, "[PARSER3]: Unrecognized token: `%s` type: `%s`\nExiting\n",

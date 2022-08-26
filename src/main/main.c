@@ -17,17 +17,17 @@ int main(void) {
   variable_dump_debug(st->udv[i]);
   variable_dump_debug(st->udv[j]);
   variable_dump_debug(st->udv[k]);
+  lexer * lex = init_lexer("x = 123.123\n");
+  token_stack * ts = lex_source(lex);
+  token_stack * rev = reverse_stack(&ts);
+  ast * abstree = parse_expression(&rev, &st);
+  ast_dump_debug(abstree);
+  free_ast(abstree);
+  while(rev)
+    rev = pop_token(rev);
+  while(ts)
+    ts = pop_token(ts);
+  free_lexer(lex);
   free_symbol_table(st);
-  // lexer * lex = init_lexer("(123 + 123) * 123.123\n");
-  // token_stack * ts = lex_source(lex);
-  // token_stack * rev = reverse_stack(&ts);
-  // ast * abstree = parse_expression(&rev);
-  // ast_dump_debug(abstree);
-  // free_ast(abstree);
-  // while(rev)
-  //   rev = pop_token(rev);
-  // while(ts)
-  //   ts = pop_token(ts);
-  // free_lexer(lex);
   return 0;
 }

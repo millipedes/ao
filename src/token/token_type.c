@@ -29,6 +29,12 @@ const char * token_type_to_string(token_type type) {
     case TOKEN_R_PAREN:   return "Token R Paren";
     case TOKEN_COMMA:     return "Token Comma";
     case TOKEN_POWER:     return "Token Power";
+    case TOKEN_ASSIGN:    return "Token Assign";
+    case TOKEN_EQUALITY:  return "Token Equality";
+    case TOKEN_GT_EQ:     return "Token Gt Eq";
+    case TOKEN_GT:        return "Token Gt";
+    case TOKEN_LT_EQ:     return "Token Lt Eq";
+    case TOKEN_LT:        return "Token Lt";
     case TOKEN_SIN:       return "Token Sin";
     case TOKEN_COS:       return "Token Cos";
     case TOKEN_TAN:       return "Token Tan";
