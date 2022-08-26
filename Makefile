@@ -33,10 +33,8 @@ plant:
 	plantuml docs/uml.txt
 	convert docs/uml.png -channel RGB -negate docs/uml.png
 
-git-update:
-	git add Makefile README.md src/ LICENSE .gitignore
-	git commit -m "update commit"
-	git push origin main
+git-add:
+	git add Makefile README.md src/ docs/
 
 clean:
 	rm $(OBJFILES)

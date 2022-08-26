@@ -4,7 +4,7 @@
 #include "../parser/include/parser.h"
 
 int main(void) {
-  lexer * lex = init_lexer("123 + 123 * 123.123\n");
+  lexer * lex = init_lexer("(123 + 123) * 123.123\n");
   token_stack * ts = lex_source(lex);
   token_stack * rev = reverse_stack(&ts);
   ast * abstree = parse_expression(&rev);
