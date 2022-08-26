@@ -49,6 +49,53 @@ void ast_dump_debug(ast * abstree) {
 }
 
 /**
+ * This function evaluates a tree.
+ * @param
+ * @return
+ */
+ast_result * evaluate_tree(ast * abstree, symbol_table * st) {
+  int variable_index = 0;
+  switch(abstree->value->type) {
+    case TOKEN_VAR:
+      variable_index = find_variable(st, abstree->value->t_literal);
+      if(variable_index != -1)
+        return init_ast_result(st->udv[variable_index]->literal,
+            st->udv[variable_index]->type);
+      fprintf(stderr, "[EVALUATE_TREE]: Variable `%s` not found.\nExiting\n",
+          abstree->value->t_literal);
+      exit(1);
+    case TOKEN_INT:
+      return init_ast_result(abstree->value->t_literal, INT);
+    case TOKEN_DOUBLE:
+      return init_ast_result(abstree->value->t_literal, DOUBLE);
+    case TOKEN_PLUS:
+      return ast_result_addition(evaluate_tree(abstree->children[0], st),
+          evaluate_tree(abstree->children[1], st));
+    case TOKEN_MINUS:
+    case TOKEN_MULT:
+    case TOKEN_DIV:
+    case TOKEN_L_PAREN:
+    case TOKEN_R_PAREN:
+    case TOKEN_COMMA:
+    case TOKEN_POWER:
+    case TOKEN_ASSIGN:
+    case TOKEN_EQUALITY:
+    case TOKEN_GT_EQ:
+    case TOKEN_GT:
+    case TOKEN_LT_EQ:
+    case TOKEN_LT:
+    case TOKEN_SIN:
+    case TOKEN_COS:
+    case TOKEN_TAN:
+    case TOKEN_ARC_SIN:
+    case TOKEN_ARC_COS:
+    case TOKEN_ARC_TAN:
+    case TOKEN_LOG:
+    case TOKEN_NEWLINE:
+  }
+}
+
+/**
  * This function frees an abstract syntax tree
  * @param abstree - the abstract syntax tree to be freed
  * @return    N/a

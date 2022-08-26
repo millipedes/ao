@@ -11,7 +11,6 @@
 
 #include <math.h>
 #include "abstract_syntax_tree.h"
-#include "../../symbol_table/include/symbol_table.h"
 
 ast * parse_expression(token_stack ** ts, symbol_table ** st);
 ast * parse_term(token_stack ** ts, symbol_table ** st);

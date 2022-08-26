@@ -9,6 +9,9 @@
 #define _POSIX_C_SOURCE 200809L
 #include"include/parser.h"
 
+// ast * parse_assignment(token_stack ** ts, symbol_table ** st) {
+// }
+
 /**
  * This function parses an expression from a token stack. Essentially anything
  * that is a mathematical term (in the sense of operands of +/-).
@@ -111,7 +114,23 @@ ast * parse_factor(token_stack ** ts, symbol_table ** st) {
   ast * tmp = NULL;
   ast * right_child = NULL;
   switch(ts[0]->current->type) {
+    /**
+     * This one statement should fall through, this error just needs to be
+     * checked.
+     */
     case TOKEN_VAR:
+      if(find_variable(st[0], ts[0]->current->t_literal) == -1) {
+        fprintf(stderr, "[PARSE_FACTOR]: Variable `%s` not found\n"
+            "Exiting", ts[0]->current->t_literal);
+        exit(1);
+      }
+      tmp = init_ast(ts[0]->current->t_literal, ts[0]->current->type);
+      ts[0] = pop_token(ts[0]);
+      if(ts[0]->current->type != TOKEN_POWER)
+        return tmp;
+      ts[0] = pop_token(ts[0]);
+      right_child = parse_factor(ts, st);
+      return binary_tree(init_ast("^", TOKEN_POWER), tmp, right_child);
     case TOKEN_INT:
     case TOKEN_DOUBLE:
       tmp = init_ast(ts[0]->current->t_literal, ts[0]->current->type);

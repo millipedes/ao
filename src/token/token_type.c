@@ -18,7 +18,6 @@
 const char * token_type_to_string(token_type type) {
   switch(type) {
     case TOKEN_VAR:       return "Token Var";
-    case TOKEN_FILE_NAME: return "Token File Name";
     case TOKEN_INT:       return "Token Int";
     case TOKEN_DOUBLE:    return "Token Double";
     case TOKEN_PLUS:      return "Token Plus";

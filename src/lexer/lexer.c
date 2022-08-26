@@ -1,6 +1,6 @@
 /**
  * @file   lexer.c
- * @brief  This file contains the functions that relate to lexing
+ * @brief  This file contains the functions that relate to lexing.
  * @author Matthew C. Lindeman
  * @date   August 25, 2022
  * @bug    None known

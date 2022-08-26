@@ -14,7 +14,6 @@
 
 typedef enum {
   TOKEN_VAR,
-  TOKEN_FILE_NAME,
   TOKEN_INT,
   TOKEN_DOUBLE,
   TOKEN_PLUS,

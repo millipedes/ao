@@ -15,10 +15,17 @@
 #include "var_type.h"
 #include "../../main/include/constants.h"
 
+/**
+ * This structure is used to represent a variable in the symbol_table
+ */
 typedef struct VARIABLE_T {
+  /** The name of the variable */
   char * name;
+  /** The literal value of the variable */
   char * literal;
-  double numeric_qty;
+  /** The numeric representation of the variable (strings are 0) */
+  double numeric_value;
+  /** The type of the variable */
   var_type type;
 } variable;
 

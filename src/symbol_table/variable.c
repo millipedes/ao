@@ -28,9 +28,9 @@ variable * init_variable(char * name, char * literal, var_type vt) {
   strncpy(var->literal, literal, literal_len);
   // If there is a numeric qty to the variable, record it otherwise make it 0
   if(vt == DOUBLE || vt == INT)
-    var->numeric_qty = atof(literal);
+    var->numeric_value = atof(literal);
   else
-    var->numeric_qty = 0;
+    var->numeric_value = 0;
   return var;
 }
 
@@ -43,7 +43,7 @@ void variable_dump_debug(variable * var) {
   printf("Variable\n");
   printf("Name: `%s`\n", var->name);
   printf("Literal: `%s`\n", var->literal);
-  printf("Numeric Qty: %f\n", var->numeric_qty);
+  printf("Numeric Qty: %f\n", var->numeric_value);
   printf("--\n");
 }
 
