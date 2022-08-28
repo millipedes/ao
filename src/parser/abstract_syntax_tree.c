@@ -72,8 +72,14 @@ ast_result * evaluate_tree(ast * abstree, symbol_table * st) {
       return ast_result_addition(evaluate_tree(abstree->children[0], st),
           evaluate_tree(abstree->children[1], st));
     case TOKEN_MINUS:
+      return ast_result_subtraction(evaluate_tree(abstree->children[0], st),
+          evaluate_tree(abstree->children[1], st));
     case TOKEN_MULT:
+      return ast_result_multiplication(evaluate_tree(abstree->children[0], st),
+          evaluate_tree(abstree->children[1], st));
     case TOKEN_DIV:
+      return ast_result_division(evaluate_tree(abstree->children[0], st),
+          evaluate_tree(abstree->children[1], st));
     case TOKEN_L_PAREN:
     case TOKEN_R_PAREN:
     case TOKEN_COMMA:

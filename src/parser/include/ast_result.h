@@ -23,6 +23,10 @@ typedef struct AST_RESULT_T {
 ast_result * init_ast_result(char * literal, var_type type);
 void ast_result_dump_debug(ast_result * astr);
 ast_result * ast_result_addition(ast_result * astr1, ast_result * astr2);
+ast_result * ast_result_subtraction(ast_result * astr1, ast_result * astr2);
+ast_result * ast_result_multiplication(ast_result * astr1, ast_result * astr2);
+ast_result * ast_result_division(ast_result * astr1, ast_result * astr2);
+int qty_digits(int n);
 void free_ast_result(ast_result * astr);
 
 #endif
