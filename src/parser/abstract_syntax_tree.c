@@ -80,10 +80,9 @@ ast_result * evaluate_tree(ast * abstree, symbol_table * st) {
     case TOKEN_DIV:
       return ast_result_division(evaluate_tree(abstree->children[0], st),
           evaluate_tree(abstree->children[1], st));
-    case TOKEN_L_PAREN:
-    case TOKEN_R_PAREN:
-    case TOKEN_COMMA:
     case TOKEN_POWER:
+      return ast_result_power(evaluate_tree(abstree->children[0], st),
+          evaluate_tree(abstree->children[1], st));
     case TOKEN_ASSIGN:
     case TOKEN_EQUALITY:
     case TOKEN_GT_EQ:
@@ -98,6 +97,10 @@ ast_result * evaluate_tree(ast * abstree, symbol_table * st) {
     case TOKEN_ARC_TAN:
     case TOKEN_LOG:
     case TOKEN_NEWLINE:
+    default:
+      fprintf(stderr, "[EVALUATE_TREE]: Unhandled Token: `%s`\nExiting\n",
+          token_type_to_string(abstree->value->type));
+      exit(1);
   }
 }
 

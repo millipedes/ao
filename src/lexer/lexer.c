@@ -154,7 +154,23 @@ token * lex_word(lexer * l) {
   }
   char * result = calloc(len + 1, sizeof(char));
   memcpy(result, &l->src[start_index], len);
-  tmp = init_token(result, TOKEN_VAR);
+  if(!strncmp("sin", result, MAX_TOK_LEN))
+    tmp = init_token(result, TOKEN_SIN);
+  else if(!strncmp("cos", result, MAX_TOK_LEN))
+    tmp = init_token(result, TOKEN_COS);
+  else if(!strncmp("tan", result, MAX_TOK_LEN))
+    tmp = init_token(result, TOKEN_TAN);
+  else if(!strncmp("arcsin", result, MAX_TOK_LEN))
+    tmp = init_token(result, TOKEN_ARC_SIN);
+  else if(!strncmp("arccos", result, MAX_TOK_LEN))
+    tmp = init_token(result, TOKEN_ARC_COS);
+  else if(!strncmp("arctan", result, MAX_TOK_LEN))
+    tmp = init_token(result, TOKEN_ARC_TAN);
+  else if(!strncmp("log", result, MAX_TOK_LEN))
+    tmp = init_token(result, TOKEN_LOG);
+  else
+    tmp = init_token(result, TOKEN_VAR);
+
   if(result)
     free(result);
   return tmp;

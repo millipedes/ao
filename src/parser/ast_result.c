@@ -203,6 +203,42 @@ ast_result * ast_result_division(ast_result * astr1, ast_result * astr2) {
   return NULL;
 }
 
+ast_result * ast_result_power(ast_result * astr1, ast_result * astr2) {
+  if(astr1->type != astr2->type) {
+    fprintf(stderr, "[ASTR_POWER]: Type Mismatch:\n1) %s\n2) %s\n"
+      "Exiting\n", var_type_to_string(astr1->type),
+      var_type_to_string(astr2->type));
+    exit(1);
+  }
+  ast_result * result = calloc(1, sizeof(struct AST_RESULT_T));
+  switch(astr1->type) {
+    case INT:
+      result->numeric_value = pow(astr1->numeric_value, astr2->numeric_value);
+      result->literal = calloc(qty_digits(result->numeric_value), sizeof(char));
+      sprintf(result->literal, "%d", (int)result->numeric_value);
+      result->type = INT;
+      free_ast_result(astr1);
+      free_ast_result(astr2);
+      return result;
+    case DOUBLE:
+      result->numeric_value = pow(astr1->numeric_value, astr2->numeric_value);
+      // If negative string has one more space, '-'
+      result->literal = (result->numeric_value > 0)
+        ? calloc(10 + qty_digits(result->numeric_value), sizeof(char))
+        : calloc(11 + qty_digits(result->numeric_value), sizeof(char));
+      sprintf(result->literal, "%.8f", result->numeric_value);
+      result->type = DOUBLE;
+      free_ast_result(astr1);
+      free_ast_result(astr2);
+      return result;
+    case STRING:
+      fprintf(stderr, "[AST_RESULT_DIV]: Division not Implemented for"
+          " Strings\nExiting\n");
+      exit(1);
+  }
+  return NULL;
+}
+
 int qty_digits(int n) {
   if (n < 10)         return 1;
   if (n < 100)        return 2;

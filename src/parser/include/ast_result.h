@@ -1,6 +1,7 @@
 #ifndef ASTR_H
 #define ASTR_H
 
+#include <math.h>
 #include <string.h>
 #include "../../main/include/constants.h"
 #include "../../symbol_table/include/var_type.h"
@@ -26,6 +27,7 @@ ast_result * ast_result_addition(ast_result * astr1, ast_result * astr2);
 ast_result * ast_result_subtraction(ast_result * astr1, ast_result * astr2);
 ast_result * ast_result_multiplication(ast_result * astr1, ast_result * astr2);
 ast_result * ast_result_division(ast_result * astr1, ast_result * astr2);
+ast_result * ast_result_power(ast_result * astr1, ast_result * astr2);
 int qty_digits(int n);
 void free_ast_result(ast_result * astr);
 
