@@ -27,7 +27,7 @@ ast * parse_expression(token_stack ** ts, symbol_table ** st) {
         return binary_tree(init_ast("+", TOKEN_PLUS), left_child, right_child);
       case TOKEN_MINUS:
         ts[0] = pop_token(ts[0]);
-        right_child = parse_expression(ts, st);
+        right_child = parse_term(ts, st);
         return binary_tree(init_ast("-", TOKEN_MINUS), left_child, right_child);
       case TOKEN_ASSIGN:
         ts[0] = pop_token(ts[0]);
@@ -53,6 +53,14 @@ ast * parse_expression(token_stack ** ts, symbol_table ** st) {
         ts[0] = pop_token(ts[0]);
         right_child = parse_expression(ts, st);
         return binary_tree(init_ast("<", TOKEN_LT), left_child, right_child);
+      case TOKEN_MULT:
+        ts[0] = pop_token(ts[0]);
+        right_child = parse_term(ts, st);
+        return binary_tree(init_ast("*", TOKEN_MULT), left_child, right_child);
+      case TOKEN_DIV:
+        ts[0] = pop_token(ts[0]);
+        right_child = parse_term(ts, st);
+        return binary_tree(init_ast("/", TOKEN_DIV), left_child, right_child);
       case TOKEN_R_PAREN:
       case TOKEN_VAR:
       case TOKEN_INT:
@@ -87,11 +95,11 @@ ast * parse_term(token_stack ** ts, symbol_table ** st) {
         return left_child;
       case TOKEN_MULT:
         ts[0] = pop_token(ts[0]);
-        right_child = parse_term(ts, st);
+        right_child = parse_factor(ts, st);
         return binary_tree(init_ast("*", TOKEN_MULT), left_child, right_child);
       case TOKEN_DIV:
         ts[0] = pop_token(ts[0]);
-        right_child = parse_term(ts, st);
+        right_child = parse_factor(ts, st);
         return binary_tree(init_ast("/", TOKEN_DIV), left_child, right_child);
       case TOKEN_PLUS:
         ts[0] = pop_token(ts[0]);
@@ -119,16 +127,7 @@ ast * parse_factor(token_stack ** ts, symbol_table ** st) {
   ast * tmp = NULL;
   ast * right_child = NULL;
   switch(ts[0]->current->type) {
-    /**
-     * This one statement should fall through, this error just needs to be
-     * checked.
-     */
     case TOKEN_VAR:
-      // if(find_variable(st[0], ts[0]->current->t_literal) == -1) {
-      //   fprintf(stderr, "[PARSE_FACTOR]: Variable `%s` not found\n"
-      //       "Exiting", ts[0]->current->t_literal);
-      //   exit(1);
-      // }
       tmp = init_ast(ts[0]->current->t_literal, ts[0]->current->type);
       ts[0] = pop_token(ts[0]);
       if(ts[0]->current->type != TOKEN_POWER)
