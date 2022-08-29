@@ -20,4 +20,3 @@ ast * unary_tree(ast * parent, ast * child);
 ast * simplify_tree(ast * abstree);
 
 #endif
-

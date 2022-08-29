@@ -34,7 +34,7 @@ package token {
     {method} + token_stack * pop_token(token_stack *)
   }
 
-  class token_type {
+  enum token_type {
      TOKEN_VAR
      TOKEN_FILE_NAME
      TOKEN_INT
@@ -62,25 +62,98 @@ package token {
 
 package parser {
   class abstract_syntax_tree {
+     {field} + value : token *
+     {field} + children : abstract_syntax_tree **
+     {field} + numeric_value : double
+     {field} + no_children : int
+    {method} + ast * init_ast(char *, token_type)
+    {method} + void ast_dump_debug(ast *)
+    {method} + ast_result * evaluate_tree(ast *, symbol_table **)
+    {method} + void free_ast(ast *)
+  }
+
+  class ast_result {
+     {field} + literal : char *
+     {field} + numeric_value : double
+     {field} + type : var_type
+    {method} + ast_result * init_ast_result(char *, var_type)
+    {method} + void ast_result_dump_debug(ast_result *)
+    {method} + ast_result * ast_result_addition(ast_result *, ast_result *)
+    {method} + ast_result * ast_result_subtraction(ast_result *, ast_result *)
+    {method} + ast_result * ast_result_multiplication(ast_result *, ast_result *)
+    {method} + ast_result * ast_result_division(ast_result *, ast_result *)
+    {method} + ast_result * ast_result_power(ast_result *, ast_result *)
+    {method} + ast_result * ast_result_assign(char *, ast_result *, symbol_table **)
+    {method} + ast_result * ast_result_equality(ast_result *, ast_result *)
+    {method} + ast_result * ast_result_gteq(ast_result *, ast_result *)
+    {method} + ast_result * ast_result_gt(ast_result *, ast_result *)
+    {method} + ast_result * ast_result_lteq(ast_result *, ast_result *)
+    {method} + ast_result * ast_result_lt(ast_result *, ast_result *)
+    {method} + ast_result * ast_result_sin(ast_result *)
+    {method} + ast_result * ast_result_arc_sin(ast_result *)
+    {method} + ast_result * ast_result_cos(ast_result *)
+    {method} + ast_result * ast_result_arc_cos(ast_result *)
+    {method} + ast_result * ast_result_tan(ast_result *)
+    {method} + ast_result * ast_result_arc_tan(ast_result *)
+    {method} + ast_result * ast_result_log(ast_result *)
+    {method} + int qty_digits(int)
+    {method} + void free_ast_result(ast_result *)
   }
 
   class parser {
+    {method} + ast * parse_expression(token_stack **, symbol_table **)
+    {method} + ast * parse_term(token_stack **, symbol_table **)
+    {method} + ast * parse_factor(token_stack **, symbol_table **)
+    {method} + ast * binary_tree(ast *, ast *, ast *)
+    {method} + ast * unary_tree(ast *, ast *)
+    {method} + ast * simplify_tree(ast *)
   }
 }
 
 package symbol_table {
   class symbol_table {
+     {field} + udv : variable **
+     {field} + previous : symbol_table *
+     {field} + qty_udv : int
+    {method} + symbol_table * init_symbol_table(void)
+    {method} + int find_variable(symbol_table *, const char *)
+    {method} + void add_variable(symbol_table *, variable *)
+    {method} + void add_variable_at_index(symbol_table *, variable *, int)
+    {method} + void free_symbol_table(symbol_table *)
+  }
+
+  class variable {
+    {field} + name : char *
+    {field} + literal : char *
+    {field} + numeric_value : double
+    {field} + type : var_type
+  }
+
+  enum var_type {
+    DOUBLE
+    INT
+    STRING
+    {method} + var_type_to_string(var_type)
   }
 }
 
-token_stack o--> token
+lexer --> token_stack
+
+abstract_syntax_tree --> ast_result
+abstract_syntax_tree --> token_stack
+abstract_syntax_tree o--> token
+
+ast_result o--> var_type
+ast_result --> symbol_table
+
+parser --> abstract_syntax_tree
+
+symbol_table "1" o--> "*" variable
+
+variable o--> var_type
+
 token       o--> token_type
 
-lexer --> token_stack
-lexer --> token
-
-parser --> lexer
-parser --> abstract_syntax_tree
-parser --> token_stack
+token_stack o--> token
 
 @enduml

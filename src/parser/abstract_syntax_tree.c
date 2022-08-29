@@ -50,8 +50,9 @@ void ast_dump_debug(ast * abstree) {
 
 /**
  * This function evaluates a tree.
- * @param
- * @return
+ * @param abstree - The Abstract Syntax Tree to be evaluated.
+ * @param      st - The stack frame for the evaluated tree.
+ * @return     .\ - The result of the evaluation.
  */
 ast_result * evaluate_tree(ast * abstree, symbol_table ** st) {
   int variable_index = 0;

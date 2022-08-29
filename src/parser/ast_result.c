@@ -4,7 +4,7 @@
  * structure.  This structure is used to hold the result of the evaluate_tree
  * set of functions (i.e. type, numeric value, and literal).
  * @author Matthew C. Lindeman
- * @date   
+ * @date   August 29, 2022
  * @bug    None known
  * @todo   Nothing
  */
@@ -50,9 +50,9 @@ void ast_result_dump_debug(ast_result * astr) {
  * This function adds two ast_results.  Note: This is used to be in conjunction
  * with the evaluate_tree family of functions as it frees each ast_result that
  * is an argument.
- * @param astr1 - The first argument of addition.
- * @param astr1 - The second argument of addition.
- * @return
+ * @param   astr1 - The first argument of addition.
+ * @param   astr1 - The second argument of addition.
+ * @return result - The result of the addition.
  */
 ast_result * ast_result_addition(ast_result * astr1, ast_result * astr2) {
   if(astr1->type != astr2->type) {
@@ -95,6 +95,14 @@ ast_result * ast_result_addition(ast_result * astr1, ast_result * astr2) {
   return NULL;
 }
 
+/**
+ * This function subtracts two ast_results.  Note: This is used to be in
+ * conjunction with the evaluate_tree family of functions as it frees each
+ * ast_result that is an argument.
+ * @param   astr1 - The first argument of subtraction.
+ * @param   astr1 - The second argument of subtraction.
+ * @return result - The result of the subtraction.
+ */
 ast_result * ast_result_subtraction(ast_result * astr1, ast_result * astr2) {
   if(astr1->type != astr2->type) {
     fprintf(stderr, "[ASTR_SUBTRACTION]: Type Mismatch:\n1) %s\n2) %s\n"
@@ -131,6 +139,14 @@ ast_result * ast_result_subtraction(ast_result * astr1, ast_result * astr2) {
   return NULL;
 }
 
+/**
+ * This function multiplies two ast_results.  Note: This is used to be in
+ * conjunction with the evaluate_tree family of functions as it frees each
+ * ast_result that is an argument.
+ * @param   astr1 - The first argument of multiplication.
+ * @param   astr1 - The second argument of multiplication.
+ * @return result - The result of the multiplication.
+ */
 ast_result * ast_result_multiplication(ast_result * astr1, ast_result * astr2) {
   if(astr1->type != astr2->type) {
     fprintf(stderr, "[ASTR_MULTIPLICATION]: Type Mismatch:\n1) %s\n2) %s\n"
@@ -167,6 +183,14 @@ ast_result * ast_result_multiplication(ast_result * astr1, ast_result * astr2) {
   return NULL;
 }
 
+/**
+ * This function divides two ast_results.  Note: This is used to be in
+ * conjunction with the evaluate_tree family of functions as it frees each
+ * ast_result that is an argument.
+ * @param   astr1 - The first argument of division.
+ * @param   astr1 - The second argument of division.
+ * @return result - The result of the division.
+ */
 ast_result * ast_result_division(ast_result * astr1, ast_result * astr2) {
   if(astr1->type != astr2->type) {
     fprintf(stderr, "[ASTR_DIVISION]: Type Mismatch:\n1) %s\n2) %s\n"
@@ -203,6 +227,14 @@ ast_result * ast_result_division(ast_result * astr1, ast_result * astr2) {
   return NULL;
 }
 
+/**
+ * This function takes an ast_result to the power of another ast_result. Note:
+ * This is used to be in conjunction with the evaluate_tree family of functions
+ * as it frees each ast_result that is an argument.
+ * @param   astr1 - The base.
+ * @param   astr1 - The power.
+ * @return result - The result of the operation.
+ */
 ast_result * ast_result_power(ast_result * astr1, ast_result * astr2) {
   if(astr1->type != astr2->type) {
     fprintf(stderr, "[ASTR_POWER]: Type Mismatch:\n1) %s\n2) %s\n"
@@ -239,6 +271,14 @@ ast_result * ast_result_power(ast_result * astr1, ast_result * astr2) {
   return NULL;
 }
 
+/**
+ * This function assigns value to the variable of name var in symbol_table st.
+ * @param   var - The name of the variable to be logged in the symbol_table.
+ * @param value - The value of the new variable.
+ * @param    st - The symbol_table for the apprpriate stack frame.
+ * @return   .\ - 1::Assignment Worked
+ *                0::Assignment Did not Work
+ */
 ast_result * ast_result_assign(char * var, ast_result * value,
     symbol_table ** st) {
   int variable_index = find_variable(st[0], var);
@@ -260,6 +300,15 @@ ast_result * ast_result_assign(char * var, ast_result * value,
   return init_ast_result("0", INT);
 }
 
+/**
+ * This function determines if astr1 has an equal numeric value to
+ * the numeric value of astr2 (for strings, it is their length values that are
+ * compared).
+ * @param      astr1 - The astr to be tested for the equal to property.
+ * @param      astr2 - The astr to be tested for the equal to property.
+ * @return result::0 - astr1->numeric_value != astr2->numeric_value
+ *         result::1 - astr1->numeric_value == astr2->numeric_value
+ */
 ast_result * ast_result_equality(ast_result * astr1, ast_result * astr2) {
   if(astr1->type != astr2->type) {
     fprintf(stderr, "[ASTR_EQUALITY]: Type Mismatch:\n1) %s\n2) %s\n"
@@ -293,6 +342,15 @@ ast_result * ast_result_equality(ast_result * astr1, ast_result * astr2) {
   return NULL;
 }
 
+/**
+ * This function determines if astr1 has a greater or equal numeric value to
+ * the numeric value of astr2 (i.e. undefined for strings).
+ * @param      astr1 - The astr to be tested for the greater or equal to
+ * property.
+ * @param      astr2 - The astr to be tested for the less than property.
+ * @return result::0 - astr1->numeric_value < astr2->numeric_value
+ *         result::1 - astr1->numeric_value >= astr2->numeric_value
+ */
 ast_result * ast_result_gteq(ast_result * astr1, ast_result * astr2) {
   if(astr1->type != astr2->type) {
     fprintf(stderr, "[ASTR_GTEQ]: Type Mismatch:\n1) %s\n2) %s\n"
@@ -320,6 +378,15 @@ ast_result * ast_result_gteq(ast_result * astr1, ast_result * astr2) {
   return NULL;
 }
 
+/**
+ * This function determines if astr1 has a greater numeric value to the numeric
+ * value of astr2 (i.e. undefined for strings).
+ * @param      astr1 - The astr to be tested for the greater than property.
+ * @param      astr2 - The astr to be tested for the less than or equal to
+ * property.
+ * @return result::0 - astr1->numeric_value <= astr2->numeric_value
+ *         result::1 - astr1->numeric_value > astr2->numeric_value
+ */
 ast_result * ast_result_gt(ast_result * astr1, ast_result * astr2) {
   if(astr1->type != astr2->type) {
     fprintf(stderr, "[ASTR_GT]: Type Mismatch:\n1) %s\n2) %s\n"
@@ -347,6 +414,15 @@ ast_result * ast_result_gt(ast_result * astr1, ast_result * astr2) {
   return NULL;
 }
 
+/**
+ * This function determines if astr1 has a lower than or equal to the numeric
+ * value of astr2 (i.e. undefined for strings).
+ * @param      astr1 - The astr to be tested for the less than or equal to
+ * property.
+ * @param      astr2 - The astr to be tested for the greater than property.
+ * @return result::0 - astr1->numeric_value > astr2->numeric_value
+ *         result::1 - astr1->numeric_value <= astr2->numeric_value
+ */
 ast_result * ast_result_lteq(ast_result * astr1, ast_result * astr2) {
   if(astr1->type != astr2->type) {
     fprintf(stderr, "[ASTR_LTEQ]: Type Mismatch:\n1) %s\n2) %s\n"
@@ -374,6 +450,15 @@ ast_result * ast_result_lteq(ast_result * astr1, ast_result * astr2) {
   return NULL;
 }
 
+/**
+ * This function determines if astr1 has a lower numeric value than astr2 (i.e.
+ * undefined for strings).
+ * @param      astr1 - The astr to be tested for the less than property.
+ * @param      astr2 - The astr to be tested for the greater than or equal to
+ * property.
+ * @return result::0 - astr1->numeric_value >= astr2->numeric_value
+ *         result::1 - astr1->numeric_value < astr2->numeric_value
+ */
 ast_result * ast_result_lt(ast_result * astr1, ast_result * astr2) {
   if(astr1->type != astr2->type) {
     fprintf(stderr, "[ASTR_LT]: Type Mismatch:\n1) %s\n2) %s\n"
@@ -401,6 +486,11 @@ ast_result * ast_result_lt(ast_result * astr1, ast_result * astr2) {
   return NULL;
 }
 
+/**
+ * This function takes the sin of astr.
+ * @param    astr - The ast result to take the sin of.
+ * @return result - The resulf of the sin.
+ */
 ast_result * ast_result_sin(ast_result * astr) {
   ast_result * result = calloc(1, sizeof(struct AST_RESULT_T));
   switch(astr->type) {
@@ -429,6 +519,11 @@ ast_result * ast_result_sin(ast_result * astr) {
   return NULL;
 }
 
+/**
+ * This function takes the arc_sin of astr.
+ * @param    astr - The ast result to take the arc_sin of.
+ * @return result - The resulf of the arc_sin.
+ */
 ast_result * ast_result_arc_sin(ast_result * astr) {
   ast_result * result = calloc(1, sizeof(struct AST_RESULT_T));
   switch(astr->type) {
@@ -457,6 +552,11 @@ ast_result * ast_result_arc_sin(ast_result * astr) {
   return NULL;
 }
 
+/**
+ * This function takes the cos of astr.
+ * @param    astr - The ast result to take the cos of.
+ * @return result - The resulf of the cos.
+ */
 ast_result * ast_result_cos(ast_result * astr) {
   ast_result * result = calloc(1, sizeof(struct AST_RESULT_T));
   switch(astr->type) {
@@ -485,6 +585,11 @@ ast_result * ast_result_cos(ast_result * astr) {
   return NULL;
 }
 
+/**
+ * This function takes the arc_cos of astr.
+ * @param    astr - The ast result to take the arc_cos of.
+ * @return result - The resulf of the arc_cos.
+ */
 ast_result * ast_result_arc_cos(ast_result * astr) {
   ast_result * result = calloc(1, sizeof(struct AST_RESULT_T));
   switch(astr->type) {
@@ -513,6 +618,11 @@ ast_result * ast_result_arc_cos(ast_result * astr) {
   return NULL;
 }
 
+/**
+ * This function takes the tan of astr.
+ * @param    astr - The ast result to take the tan of.
+ * @return result - The resulf of the tan.
+ */
 ast_result * ast_result_tan(ast_result * astr) {
   ast_result * result = calloc(1, sizeof(struct AST_RESULT_T));
   switch(astr->type) {
@@ -541,6 +651,11 @@ ast_result * ast_result_tan(ast_result * astr) {
   return NULL;
 }
 
+/**
+ * This function takes the arc_tan of astr.
+ * @param    astr - The ast result to take the arc_tan of.
+ * @return result - The resulf of the arc_tan.
+ */
 ast_result * ast_result_arc_tan(ast_result * astr) {
   ast_result * result = calloc(1, sizeof(struct AST_RESULT_T));
   switch(astr->type) {
@@ -569,6 +684,11 @@ ast_result * ast_result_arc_tan(ast_result * astr) {
   return NULL;
 }
 
+/**
+ * This function takes the base 2 logarithm of astr.
+ * @param    astr - The ast result to take the logarithm of.
+ * @return result - The resulf of the logarithm.
+ */
 ast_result * ast_result_log(ast_result * astr) {
   ast_result * result = calloc(1, sizeof(struct AST_RESULT_T));
   switch(astr->type) {
@@ -597,6 +717,11 @@ ast_result * ast_result_log(ast_result * astr) {
   return NULL;
 }
 
+/**
+ * This function determines the number of whole number digits in a number.
+ * @param   n - The number to get the property of.
+ * @return .\ - How may whole number digits in n.
+ */
 int qty_digits(int n) {
   if (n < 10)         return 1;
   if (n < 100)        return 2;

@@ -1,3 +1,11 @@
+/**
+ * @file   ast_result.h
+ * @brief  This file contains the function definitions for ast_result.c
+ * @author Matthew C. Lindeman
+ * @date   August 29, 2022
+ * @bug    None known
+ * @todo   Nothing
+ */
 #ifndef ASTR_H
 #define ASTR_H
 
