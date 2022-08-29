@@ -64,7 +64,7 @@ ast_result * ast_result_addition(ast_result * astr1, ast_result * astr2) {
   switch(astr1->type) {
     case INT:
       result->numeric_value = astr1->numeric_value + astr2->numeric_value;
-      result->literal = calloc(qty_digits(result->numeric_value), sizeof(char));
+      result->literal = calloc(qty_digits(result->numeric_value) + 1, sizeof(char));
       sprintf(result->literal, "%d", (int)result->numeric_value);
       result->type = INT;
       free_ast_result(astr1);
@@ -237,6 +237,27 @@ ast_result * ast_result_power(ast_result * astr1, ast_result * astr2) {
       exit(1);
   }
   return NULL;
+}
+
+ast_result * ast_result_assign(char * var, ast_result * value,
+    symbol_table ** st) {
+  int variable_index = find_variable(st[0], var);
+  if(variable_index != -1) {
+    free_variable(st[0]->udv[variable_index]);
+    add_variable_at_index(st[0],
+        init_variable(var, value->literal, value->type), variable_index);
+    if(st[0]->udv[variable_index]) {
+      free_ast_result(value);
+      return init_ast_result("1", INT);
+    }
+  } else {
+    add_variable(st[0], init_variable(var, value->literal, value->type));
+    if(st[0]->udv[st[0]->qty_udv - 1]) {
+      free_ast_result(value);
+      return init_ast_result("1", INT);
+    }
+  }
+  return init_ast_result("0", INT);
 }
 
 int qty_digits(int n) {

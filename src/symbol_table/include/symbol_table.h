@@ -28,6 +28,7 @@ typedef struct SYMBOL_TABLE_T {
 symbol_table * init_symbol_table(void);
 int find_variable(symbol_table * st, const char * name);
 void add_variable(symbol_table * st, variable * var);
+void add_variable_at_index(symbol_table * st, variable * var, int index);
 void free_symbol_table(symbol_table * st);
 
 #endif

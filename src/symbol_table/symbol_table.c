@@ -53,6 +53,11 @@ void add_variable(symbol_table * st, variable * var) {
   st->udv[st->qty_udv - 1] = var;
 }
 
+void add_variable_at_index(symbol_table * st, variable * var, int index) {
+  if(st->udv[index])
+    st->udv[index] = var;
+}
+
 /**
  * This function frees a symbol_table.
  * @param   st - The symbol_table to be freed.

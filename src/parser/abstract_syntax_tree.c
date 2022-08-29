@@ -53,14 +53,14 @@ void ast_dump_debug(ast * abstree) {
  * @param
  * @return
  */
-ast_result * evaluate_tree(ast * abstree, symbol_table * st) {
+ast_result * evaluate_tree(ast * abstree, symbol_table ** st) {
   int variable_index = 0;
   switch(abstree->value->type) {
     case TOKEN_VAR:
-      variable_index = find_variable(st, abstree->value->t_literal);
+      variable_index = find_variable(st[0], abstree->value->t_literal);
       if(variable_index != -1)
-        return init_ast_result(st->udv[variable_index]->literal,
-            st->udv[variable_index]->type);
+        return init_ast_result(st[0]->udv[variable_index]->literal,
+            st[0]->udv[variable_index]->type);
       fprintf(stderr, "[EVALUATE_TREE]: Variable `%s` not found.\nExiting\n",
           abstree->value->t_literal);
       exit(1);
@@ -84,6 +84,8 @@ ast_result * evaluate_tree(ast * abstree, symbol_table * st) {
       return ast_result_power(evaluate_tree(abstree->children[0], st),
           evaluate_tree(abstree->children[1], st));
     case TOKEN_ASSIGN:
+      return ast_result_assign(abstree->children[0]->value->t_literal,
+          evaluate_tree(abstree->children[1], st), st);
     case TOKEN_EQUALITY:
     case TOKEN_GT_EQ:
     case TOKEN_GT:

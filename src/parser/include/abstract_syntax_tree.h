@@ -12,7 +12,6 @@
 
 #include "ast_result.h"
 #include "../../token/include/token_stack.h"
-#include "../../symbol_table/include/symbol_table.h"
 
 /**
  * This data structure is used to represent functions. It is a standard abstract
@@ -32,7 +31,7 @@ typedef struct AST_T {
 
 ast * init_ast(char * t_literal, token_type type);
 void ast_dump_debug(ast * abstree);
-ast_result * evaluate_tree(ast * abstree, symbol_table * st);
+ast_result * evaluate_tree(ast * abstree, symbol_table ** st);
 void free_ast(ast * abstree);
 
 #endif

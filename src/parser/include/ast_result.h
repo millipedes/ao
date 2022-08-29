@@ -5,6 +5,7 @@
 #include <string.h>
 #include "../../main/include/constants.h"
 #include "../../symbol_table/include/var_type.h"
+#include "../../symbol_table/include/symbol_table.h"
 
 /**
  * This structure is used for wrapping the result of the evaluate_tree function.
@@ -28,6 +29,8 @@ ast_result * ast_result_subtraction(ast_result * astr1, ast_result * astr2);
 ast_result * ast_result_multiplication(ast_result * astr1, ast_result * astr2);
 ast_result * ast_result_division(ast_result * astr1, ast_result * astr2);
 ast_result * ast_result_power(ast_result * astr1, ast_result * astr2);
+ast_result * ast_result_assign(char * var, ast_result * value,
+    symbol_table ** st);
 int qty_digits(int n);
 void free_ast_result(ast_result * astr);
 

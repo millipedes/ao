@@ -9,9 +9,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include"include/parser.h"
 
-// ast * parse_assignment(token_stack ** ts, symbol_table ** st) {
-// }
-
 /**
  * This function parses an expression from a token stack. Essentially anything
  * that is a mathematical term (in the sense of operands of +/-).
