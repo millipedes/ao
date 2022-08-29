@@ -108,6 +108,9 @@ token * lex_next_token(lexer * l) {
     case ',':
       lex_advance(l);
       return init_token(",", TOKEN_COMMA);
+    case '\"':
+      lex_advance(l);
+      return lex_string(l);
     case '\n':
     case '\r':
       return init_token("0", TOKEN_NEWLINE);
@@ -171,6 +174,23 @@ token * lex_word(lexer * l) {
   else
     tmp = init_token(result, TOKEN_VAR);
 
+  if(result)
+    free(result);
+  return tmp;
+}
+
+token * lex_string(lexer * l) {
+  token * tmp = NULL;
+  size_t len = 0;
+  int start_index = l->curr_index;
+  while(l->c != '\"') {
+    lex_advance(l);
+    len++;
+  }
+  lex_advance(l);
+  char * result = calloc(len + 1, sizeof(char));
+  memcpy(result, &l->src[start_index], len);
+  tmp = init_token(result, TOKEN_STRING);
   if(result)
     free(result);
   return tmp;

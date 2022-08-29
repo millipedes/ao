@@ -47,6 +47,25 @@ void ast_result_dump_debug(ast_result * astr) {
 }
 
 /**
+ * This function takes an ast_result and prints its value.
+ * @param astr - The ast_result to be printed.
+ * @return N/a
+ */
+void ast_print_result(ast_result * astr) {
+  switch(astr->type) {
+    case INT:
+      printf("%d\n", (int)astr->numeric_value);
+      break;
+    case DOUBLE:
+      printf("%f\n", astr->numeric_value);
+      break;
+    case STRING:
+      printf("\"%s\"\n", astr->literal);
+      break;
+  }
+}
+
+/**
  * This function adds two ast_results.  Note: This is used to be in conjunction
  * with the evaluate_tree family of functions as it frees each ast_result that
  * is an argument.

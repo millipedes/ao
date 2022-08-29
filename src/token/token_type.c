@@ -20,6 +20,7 @@ const char * token_type_to_string(token_type type) {
     case TOKEN_VAR:       return "Token Var";
     case TOKEN_INT:       return "Token Int";
     case TOKEN_DOUBLE:    return "Token Double";
+    case TOKEN_STRING:    return "Token String";
     case TOKEN_PLUS:      return "Token Plus";
     case TOKEN_MINUS:     return "Token Minus";
     case TOKEN_MULT:      return "Token Mult";

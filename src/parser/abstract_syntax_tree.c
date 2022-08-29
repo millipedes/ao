@@ -69,6 +69,8 @@ ast_result * evaluate_tree(ast * abstree, symbol_table ** st) {
       return init_ast_result(abstree->value->t_literal, INT);
     case TOKEN_DOUBLE:
       return init_ast_result(abstree->value->t_literal, DOUBLE);
+    case TOKEN_STRING:
+      return init_ast_result(abstree->value->t_literal, STRING);
     case TOKEN_PLUS:
       return ast_result_addition(evaluate_tree(abstree->children[0], st),
           evaluate_tree(abstree->children[1], st));

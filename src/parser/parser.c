@@ -65,6 +65,7 @@ ast * parse_expression(token_stack ** ts, symbol_table ** st) {
       case TOKEN_VAR:
       case TOKEN_INT:
       case TOKEN_DOUBLE:
+      case TOKEN_STRING:
       case TOKEN_NEWLINE: // This will occur bc factor pops id i.e. newline
         return left_child;
       default:
@@ -92,6 +93,7 @@ ast * parse_term(token_stack ** ts, symbol_table ** st) {
       case TOKEN_VAR:
       case TOKEN_INT:
       case TOKEN_DOUBLE:
+      case TOKEN_STRING:
         return left_child;
       case TOKEN_MULT:
         ts[0] = pop_token(ts[0]);
@@ -135,6 +137,10 @@ ast * parse_factor(token_stack ** ts, symbol_table ** st) {
       ts[0] = pop_token(ts[0]);
       right_child = parse_factor(ts, st);
       return binary_tree(init_ast("^", TOKEN_POWER), tmp, right_child);
+    case TOKEN_STRING:
+      tmp = init_ast(ts[0]->current->t_literal, ts[0]->current->type);
+      ts[0] = pop_token(ts[0]);
+      return tmp;
     case TOKEN_INT:
     case TOKEN_DOUBLE:
       tmp = init_ast(ts[0]->current->t_literal, ts[0]->current->type);

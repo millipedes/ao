@@ -35,6 +35,7 @@ void repl(void) {
     rev = reverse_stack(&ts);
     abstree = parse_expression(&rev, &st);
     astr = evaluate_tree(abstree, &st);
+    // ast_print_result(astr);
     ast_result_dump_debug(astr);
     free_ast(abstree);
     free_ast_result(astr);
