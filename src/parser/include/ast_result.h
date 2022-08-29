@@ -31,6 +31,18 @@ ast_result * ast_result_division(ast_result * astr1, ast_result * astr2);
 ast_result * ast_result_power(ast_result * astr1, ast_result * astr2);
 ast_result * ast_result_assign(char * var, ast_result * value,
     symbol_table ** st);
+ast_result * ast_result_equality(ast_result * astr1, ast_result * astr2);
+ast_result * ast_result_gteq(ast_result * astr1, ast_result * astr2);
+ast_result * ast_result_gt(ast_result * astr1, ast_result * astr2);
+ast_result * ast_result_lteq(ast_result * astr1, ast_result * astr2);
+ast_result * ast_result_lt(ast_result * astr1, ast_result * astr2);
+ast_result * ast_result_sin(ast_result * astr);
+ast_result * ast_result_arc_sin(ast_result * astr);
+ast_result * ast_result_cos(ast_result * astr);
+ast_result * ast_result_arc_cos(ast_result * astr);
+ast_result * ast_result_tan(ast_result * astr);
+ast_result * ast_result_arc_tan(ast_result * astr);
+ast_result * ast_result_log(ast_result * astr);
 int qty_digits(int n);
 void free_ast_result(ast_result * astr);
 

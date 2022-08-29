@@ -87,18 +87,34 @@ ast_result * evaluate_tree(ast * abstree, symbol_table ** st) {
       return ast_result_assign(abstree->children[0]->value->t_literal,
           evaluate_tree(abstree->children[1], st), st);
     case TOKEN_EQUALITY:
+      return ast_result_equality(evaluate_tree(abstree->children[0], st),
+          evaluate_tree(abstree->children[1], st));
     case TOKEN_GT_EQ:
+      return ast_result_gteq(evaluate_tree(abstree->children[0], st),
+          evaluate_tree(abstree->children[1], st));
     case TOKEN_GT:
+      return ast_result_gt(evaluate_tree(abstree->children[0], st),
+          evaluate_tree(abstree->children[1], st));
     case TOKEN_LT_EQ:
+      return ast_result_lteq(evaluate_tree(abstree->children[0], st),
+          evaluate_tree(abstree->children[1], st));
     case TOKEN_LT:
+      return ast_result_lt(evaluate_tree(abstree->children[0], st),
+          evaluate_tree(abstree->children[1], st));
     case TOKEN_SIN:
+      return ast_result_sin(evaluate_tree(abstree->children[0], st));
     case TOKEN_COS:
+      return ast_result_cos(evaluate_tree(abstree->children[0], st));
     case TOKEN_TAN:
+      return ast_result_tan(evaluate_tree(abstree->children[0], st));
     case TOKEN_ARC_SIN:
+      return ast_result_arc_sin(evaluate_tree(abstree->children[0], st));
     case TOKEN_ARC_COS:
+      return ast_result_arc_cos(evaluate_tree(abstree->children[0], st));
     case TOKEN_ARC_TAN:
+      return ast_result_arc_tan(evaluate_tree(abstree->children[0], st));
     case TOKEN_LOG:
-    case TOKEN_NEWLINE:
+      return ast_result_log(evaluate_tree(abstree->children[0], st));
     default:
       fprintf(stderr, "[EVALUATE_TREE]: Unhandled Token: `%s`\nExiting\n",
           token_type_to_string(abstree->value->type));

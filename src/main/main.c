@@ -17,7 +17,7 @@ int main(void) {
   // variable_dump_debug(st->udv[j]);
   // variable_dump_debug(st->udv[k]);
 
-  lexer * lex = init_lexer("x = 1 + 2\n");
+  lexer * lex = init_lexer("sin(1 + 2)\n");
 
   token_stack * ts = lex_source(lex);
   token_stack * rev = reverse_stack(&ts);
