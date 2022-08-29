@@ -124,11 +124,11 @@ ast * parse_factor(token_stack ** ts, symbol_table ** st) {
      * checked.
      */
     case TOKEN_VAR:
-      if(find_variable(st[0], ts[0]->current->t_literal) == -1) {
-        fprintf(stderr, "[PARSE_FACTOR]: Variable `%s` not found\n"
-            "Exiting", ts[0]->current->t_literal);
-        exit(1);
-      }
+      // if(find_variable(st[0], ts[0]->current->t_literal) == -1) {
+      //   fprintf(stderr, "[PARSE_FACTOR]: Variable `%s` not found\n"
+      //       "Exiting", ts[0]->current->t_literal);
+      //   exit(1);
+      // }
       tmp = init_ast(ts[0]->current->t_literal, ts[0]->current->type);
       ts[0] = pop_token(ts[0]);
       if(ts[0]->current->type != TOKEN_POWER)
