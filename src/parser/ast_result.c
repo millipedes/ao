@@ -114,7 +114,7 @@ ast_result * ast_result_subtraction(ast_result * astr1, ast_result * astr2) {
   switch(astr1->type) {
     case INT:
       result->numeric_value = astr1->numeric_value - astr2->numeric_value;
-      result->literal = calloc(qty_digits(result->numeric_value) + 1, sizeof(char));
+      result->literal = calloc(qty_digits(result->numeric_value) + 2, sizeof(char));
       sprintf(result->literal, "%d", (int)result->numeric_value);
       result->type = INT;
       free_ast_result(astr1);
