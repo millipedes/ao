@@ -151,7 +151,7 @@ token * lex_word(lexer * l) {
   token * tmp = NULL;
   size_t len = 0;
   int start_index = l->curr_index;
-  while(isalpha(l->c) || l->c == '_') {
+  while(isalpha(l->c) || l->c == '_' || isdigit(l->c)) {
     lex_advance(l);
     len++;
   }
@@ -179,6 +179,11 @@ token * lex_word(lexer * l) {
   return tmp;
 }
 
+/**
+ * This function lexes a string into a token.
+ * @param    l - The lexer from which it should be lexed.
+ * @return tmp - The token representative of that string.
+ */
 token * lex_string(lexer * l) {
   token * tmp = NULL;
   size_t len = 0;

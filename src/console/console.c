@@ -35,8 +35,8 @@ void repl(void) {
     rev = reverse_stack(&ts);
     abstree = parse_expression(&rev, &st);
     astr = evaluate_tree(abstree, &st);
-    // ast_print_result(astr);
-    ast_result_dump_debug(astr);
+    ast_print_result(astr);
+    // ast_result_dump_debug(astr);
     free_ast(abstree);
     free_ast_result(astr);
     while(rev)
@@ -46,4 +46,36 @@ void repl(void) {
     free_lexer(lex);
   }
   free_symbol_table(st);
+}
+
+void interpret(char * file_name) {
+  FILE * fp = fopen(file_name, "r");
+  char buf[MAX_TOK_LEN];
+  lexer * lex = NULL;
+  token_stack * ts = NULL;
+  token_stack * rev = NULL;
+  ast * abstree = NULL;
+  ast_result * astr = NULL;
+  symbol_table * st = init_symbol_table();
+  while(1) {
+    fgets(buf, MAX_TOK_LEN, fp);
+    if(!strncmp("exit\n", buf, MAX_TOK_LEN))
+      break;
+    lex = init_lexer(buf);
+    ts = lex_source(lex);
+    rev = reverse_stack(&ts);
+    abstree = parse_expression(&rev, &st);
+    astr = evaluate_tree(abstree, &st);
+    ast_print_result(astr);
+    // ast_result_dump_debug(astr);
+    free_ast(abstree);
+    free_ast_result(astr);
+    while(rev)
+      rev = pop_token(rev);
+    while(ts)
+      ts = pop_token(ts);
+    free_lexer(lex);
+  }
+  free_symbol_table(st);
+  fclose(fp);
 }

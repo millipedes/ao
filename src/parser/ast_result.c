@@ -74,6 +74,10 @@ void ast_print_result(ast_result * astr) {
  * @return result - The result of the addition.
  */
 ast_result * ast_result_addition(ast_result * astr1, ast_result * astr2) {
+  size_t one_len = 0;
+  size_t two_len = 0;
+  size_t result_len = 0;
+
   if(astr1->type != astr2->type) {
     fprintf(stderr, "[ASTR_ADDITION]: Type Mismatch:\n1) %s\n2) %s\nExiting\n",
         var_type_to_string(astr1->type), var_type_to_string(astr2->type));
@@ -101,10 +105,11 @@ ast_result * ast_result_addition(ast_result * astr1, ast_result * astr2) {
       free_ast_result(astr2);
       return result;
     case STRING:
-      size_t one_len = strnlen(astr1->literal, MAX_TOK_LEN);
-      size_t two_len = strnlen(astr2->literal, MAX_TOK_LEN);
-      size_t result_len = one_len + two_len + 1;
+      one_len = strnlen(astr1->literal, MAX_TOK_LEN);
+      two_len = strnlen(astr2->literal, MAX_TOK_LEN);
+      result_len = one_len + two_len + 1;
       result->literal = calloc(result_len, sizeof(char));
+      result->type = STRING;
       strncat(result->literal, astr1->literal, result_len);
       strncat(result->literal, astr2->literal, result_len);
       free_ast_result(astr1);

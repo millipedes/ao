@@ -17,5 +17,6 @@
 #include "../../symbol_table/include/symbol_table.h"
 
 void repl(void);
+void interpret(char * file_name);
 
 #endif

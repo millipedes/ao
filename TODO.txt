@@ -1,0 +1,18 @@
+# Before Release 1.0:
+  1) 100% Stack Frame Completion
+    a) Set-Subset Data Type
+    b) Bool Type
+      i) &&
+      ii) ||
+    c) Control Structues
+      i)   if
+      ii)  for
+      iii) while
+      iv)  switch
+      v)   case
+      vi)  break
+  2) Install Function Parser
+  3) Install Function Struct
+  4) Install Function to Symbol Table
+  5) Make Entry Point Function
+  6) Importability
