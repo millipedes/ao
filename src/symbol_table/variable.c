@@ -17,20 +17,31 @@
  * @param      vt - The variable type.
  * @return
  */
-variable * init_variable(char * name, char * literal, var_type vt) {
+variable * init_variable(char * name, void * literal, var_type vt) {
   variable * var = calloc(1, sizeof(struct VARIABLE_T));
-  size_t name_len = strnlen(name, MAX_TOK_LEN);
-  size_t literal_len = strnlen(literal, MAX_TOK_LEN);
+  size_t len = 0;
   var->type = vt;
-  var->name = calloc(name_len + 1, sizeof(char));
-  var->literal = calloc(literal_len + 1, sizeof(char));
-  strncpy(var->name, name, name_len);
-  strncpy(var->literal, literal, literal_len);
-  // If there is a numeric qty to the variable, record it otherwise make it 0
-  if(vt == DOUBLE || vt == INT)
-    var->numeric_value = atof(literal);
-  else
-    var->numeric_value = 0;
+  len = strnlen(name, MAX_TOK_LEN) + 1;
+  var->name = calloc(len, sizeof(char));
+  strncpy(var->name, name, len);
+  switch(vt) {
+    case DOUBLE:
+      var->literal = calloc(1, sizeof(double));
+      // C is awesome!! :)
+      *((double *)var->literal) = *(double*)literal;
+      break;
+    case INT:
+      var->literal = calloc(1, sizeof(int));
+      // C is awesome!! :)
+      *((int *)var->literal) = *(int*)literal;
+      break;
+    case STRING:
+      // C is awesome!! :)
+      len = strnlen((char *)literal, MAX_TOK_LEN) + 1;
+      var->literal = calloc(len, sizeof(char));
+      strncpy((char *)var->literal, literal, len);
+      break;
+  }
   return var;
 }
 
@@ -42,8 +53,18 @@ variable * init_variable(char * name, char * literal, var_type vt) {
 void variable_dump_debug(variable * var) {
   printf("Variable\n");
   printf("Name: `%s`\n", var->name);
-  printf("Literal: `%s`\n", var->literal);
-  printf("Numeric Qty: %f\n", var->numeric_value);
+  printf("Value: ");
+  switch(var->type) {
+    case INT:
+      printf("%d\n", *((int *)var->literal));
+      break;
+    case DOUBLE:
+      printf("%f\n", *((double *)var->literal));
+      break;
+    case STRING:
+      printf("`%s`\n", (char *)var->literal);
+      break;
+  }
   printf("--\n");
 }
 

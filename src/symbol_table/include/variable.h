@@ -21,15 +21,13 @@
 typedef struct VARIABLE_T {
   /** The name of the variable */
   char * name;
-  /** The literal value of the variable */
-  char * literal;
-  /** The numeric representation of the variable (strings are 0) */
-  double numeric_value;
+  /** The value of the variable */
+  void * literal;
   /** The type of the variable */
   var_type type;
 } variable;
 
-variable * init_variable(char * name, char * literal, var_type vt);
+variable * init_variable(char * name, void * literal, var_type vt);
 void variable_dump_debug(variable * var);
 void free_variable(variable * var);
 
