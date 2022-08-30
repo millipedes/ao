@@ -3,7 +3,6 @@
     a) Set-Subset Data Type
     b) Bool Type
       i) &&
-      ii) ||
     c) Control Structues
       i)   if
       ii)  for

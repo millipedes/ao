@@ -58,10 +58,6 @@ ast_result * evaluate_tree(ast * abstree, symbol_table ** st) {
   int variable_index = 0;
   switch(abstree->value->type) {
     case TOKEN_VAR:
-      if(abstree->no_children > 0) {
-        printf("Successful, terminating");
-        exit(0);
-      }
       variable_index = find_variable(st[0], abstree->value->t_literal);
       if(variable_index != -1)
         return init_ast_result(st[0]->udv[variable_index]->literal,

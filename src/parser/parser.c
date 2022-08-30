@@ -23,11 +23,11 @@ ast * parse_expression(token_stack ** ts, symbol_table ** st) {
     switch(ts[0]->current->type) {
       case TOKEN_PLUS:
         ts[0] = pop_token(ts[0]);
-        right_child = parse_term(ts, st);
+        right_child = parse_expression(ts, st);
         return binary_tree(init_ast("+", TOKEN_PLUS), left_child, right_child);
       case TOKEN_MINUS:
         ts[0] = pop_token(ts[0]);
-        right_child = parse_term(ts, st);
+        right_child = parse_expression(ts, st);
         return binary_tree(init_ast("-", TOKEN_MINUS), left_child, right_child);
       case TOKEN_ASSIGN:
         ts[0] = pop_token(ts[0]);
@@ -113,13 +113,15 @@ ast * parse_term(token_stack ** ts, symbol_table ** st) {
         right_child = parse_factor(ts, st);
         return binary_tree(init_ast("/", TOKEN_DIV), left_child, right_child);
       case TOKEN_PLUS:
-        ts[0] = pop_token(ts[0]);
-        right_child = parse_factor(ts, st);
-        return binary_tree(init_ast("+", TOKEN_PLUS), left_child, right_child);
+        return left_child;
+        // ts[0] = pop_token(ts[0]);
+        // right_child = parse_factor(ts, st);
+        // return binary_tree(init_ast("+", TOKEN_PLUS), left_child, right_child);
       case TOKEN_MINUS:
-        ts[0] = pop_token(ts[0]);
-        right_child = parse_factor(ts, st);
-        return binary_tree(init_ast("-", TOKEN_MINUS), left_child, right_child);
+        return left_child;
+        // ts[0] = pop_token(ts[0]);
+        // right_child = parse_factor(ts, st);
+        // return binary_tree(init_ast("-", TOKEN_MINUS), left_child, right_child);
       default:
         return left_child;
     }
