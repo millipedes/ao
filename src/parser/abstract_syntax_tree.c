@@ -58,6 +58,10 @@ ast_result * evaluate_tree(ast * abstree, symbol_table ** st) {
   int variable_index = 0;
   switch(abstree->value->type) {
     case TOKEN_VAR:
+      if(abstree->no_children > 0) {
+        printf("Successful, terminating");
+        exit(0);
+      }
       variable_index = find_variable(st[0], abstree->value->t_literal);
       if(variable_index != -1)
         return init_ast_result(st[0]->udv[variable_index]->literal,
@@ -123,6 +127,17 @@ ast_result * evaluate_tree(ast * abstree, symbol_table ** st) {
           token_type_to_string(abstree->value->type));
       exit(1);
   }
+}
+
+ast * add_child(ast * parent, ast * new_child) {
+  parent->no_children++;
+  if(parent->no_children == 1)
+    parent->children = calloc(1, sizeof(struct AST_T *));
+  else
+    parent->children = realloc(parent->children, parent->no_children
+        * sizeof(struct AST_T *));
+  parent->children[parent->no_children - 1] = new_child;
+  return parent;
 }
 
 /**

@@ -84,12 +84,27 @@ token * lex_next_token(lexer * l) {
         lex_advance(l);
         return init_token("<", TOKEN_LT);
       }
+    case '|':
+      if(l->src[l->curr_index + 1] == '|') {
+        lex_advance(l);
+        lex_advance(l);
+        return init_token("||", TOKEN_L_OR);
+      } else {
+        fprintf(stderr, "Unmatched \'|\'\nExiting\n");
+        exit(1);
+      }
     case '(':
       lex_advance(l);
       return init_token("(", TOKEN_L_PAREN);
     case ')':
       lex_advance(l);
       return init_token(")", TOKEN_R_PAREN);
+    case '[':
+      lex_advance(l);
+      return init_token("[", TOKEN_L_BRACKET);
+    case ']':
+      lex_advance(l);
+      return init_token("]", TOKEN_R_BRACKET);
     case '^':
       lex_advance(l);
       return init_token("^", TOKEN_POWER);

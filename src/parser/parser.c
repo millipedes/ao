@@ -53,6 +53,10 @@ ast * parse_expression(token_stack ** ts, symbol_table ** st) {
         ts[0] = pop_token(ts[0]);
         right_child = parse_expression(ts, st);
         return binary_tree(init_ast("<", TOKEN_LT), left_child, right_child);
+      case TOKEN_L_OR:
+        ts[0] = pop_token(ts[0]);
+        right_child = parse_expression(ts, st);
+        return binary_tree(init_ast("||", TOKEN_L_OR), left_child, right_child);
       case TOKEN_MULT:
         ts[0] = pop_token(ts[0]);
         right_child = parse_term(ts, st);
@@ -61,10 +65,15 @@ ast * parse_expression(token_stack ** ts, symbol_table ** st) {
         ts[0] = pop_token(ts[0]);
         right_child = parse_term(ts, st);
         return binary_tree(init_ast("/", TOKEN_DIV), left_child, right_child);
+      case TOKEN_L_BRACKET:
+        right_child = parse_factor(ts, st);
+        return unary_tree(left_child, right_child);
       case TOKEN_R_PAREN:
+      case TOKEN_R_BRACKET:
       case TOKEN_VAR:
       case TOKEN_INT:
       case TOKEN_DOUBLE:
+      case TOKEN_COMMA:
       case TOKEN_STRING:
       case TOKEN_NEWLINE: // This will occur bc factor pops id i.e. newline
         return left_child;
@@ -122,56 +131,68 @@ ast * parse_term(token_stack ** ts, symbol_table ** st) {
 /**
  * This function is meant to parse a factor, just either a number/variable or an
  * expression within a parenthesis
- * @param   ts - the token stack to be parsed
- * @return tmp - the new abstract syntax tree from the factor
+ * @param          ts - the token stack to be parsed
+ * @return left_child - the new abstract syntax tree from the factor
  */
 ast * parse_factor(token_stack ** ts, symbol_table ** st) {
-  ast * tmp = NULL;
+  ast * parent = NULL;
+  ast * left_child = NULL;
   ast * right_child = NULL;
   switch(ts[0]->current->type) {
     case TOKEN_VAR:
-      tmp = init_ast(ts[0]->current->t_literal, ts[0]->current->type);
+      left_child = init_ast(ts[0]->current->t_literal, ts[0]->current->type);
       ts[0] = pop_token(ts[0]);
       if(ts[0]->current->type != TOKEN_POWER)
-        return tmp;
+        return left_child;
       ts[0] = pop_token(ts[0]);
       right_child = parse_factor(ts, st);
-      return binary_tree(init_ast("^", TOKEN_POWER), tmp, right_child);
+      return binary_tree(init_ast("^", TOKEN_POWER), left_child, right_child);
     case TOKEN_STRING:
-      tmp = init_ast(ts[0]->current->t_literal, ts[0]->current->type);
+      left_child = init_ast(ts[0]->current->t_literal, ts[0]->current->type);
       ts[0] = pop_token(ts[0]);
-      return tmp;
+      return left_child;
     case TOKEN_INT:
     case TOKEN_DOUBLE:
-      tmp = init_ast(ts[0]->current->t_literal, ts[0]->current->type);
+      left_child = init_ast(ts[0]->current->t_literal, ts[0]->current->type);
       ts[0] = pop_token(ts[0]);
       if(ts[0]->current->type != TOKEN_POWER)
-        return tmp;
+        return left_child;
       ts[0] = pop_token(ts[0]);
       right_child = parse_factor(ts, st);
-      return binary_tree(init_ast("^", TOKEN_POWER), tmp, right_child);
+      return binary_tree(init_ast("^", TOKEN_POWER), left_child, right_child);
     case TOKEN_L_PAREN:
       ts[0] = pop_token(ts[0]);
-      tmp = parse_expression(ts, st);
+      left_child = parse_expression(ts, st);
       if(ts[0]->current->type == TOKEN_R_PAREN) {
         ts[0] = pop_token(ts[0]);
         if(ts[0]->current->type != TOKEN_POWER)
-          return tmp;
+          return left_child;
         ts[0] = pop_token(ts[0]);
         right_child = parse_factor(ts, st);
-        return binary_tree(init_ast("^", TOKEN_POWER), tmp, right_child);
+        return binary_tree(init_ast("^", TOKEN_POWER), left_child, right_child);
       } else {
         fprintf(stderr, "[PARSER4]: UnMatched Parenthesis\nExiting\n");
         exit(1);
       }
+    case TOKEN_L_BRACKET:
+      ts[0] = pop_token(ts[0]);
+      parent = init_ast("[]", TOKEN_L_BRACKET);
+      parent = add_child(parent, parse_expression(ts, st));
+      while(ts[0]->current->type != TOKEN_R_BRACKET) {
+        if(ts[0]->current->type == TOKEN_COMMA)
+          ts[0] = pop_token(ts[0]);
+        parent = add_child(parent, parse_expression(ts, st));
+      }
+      ast_dump_debug(parent);
+      return parent;
     case TOKEN_MULT:
       ts[0] = pop_token(ts[0]);
       right_child = parse_term(ts, st);
-      return binary_tree(init_ast("*", TOKEN_MULT), tmp, right_child);
+      return binary_tree(init_ast("*", TOKEN_MULT), left_child, right_child);
     case TOKEN_DIV:
       ts[0] = pop_token(ts[0]);
       right_child = parse_term(ts, st);
-      return binary_tree(init_ast("/", TOKEN_DIV), tmp, right_child);
+      return binary_tree(init_ast("/", TOKEN_DIV), left_child, right_child);
     case TOKEN_SIN:
       ts[0] = pop_token(ts[0]);
       right_child = parse_factor(ts, st);

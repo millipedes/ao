@@ -32,6 +32,7 @@ typedef struct AST_T {
 ast * init_ast(char * t_literal, token_type type);
 void ast_dump_debug(ast * abstree);
 ast_result * evaluate_tree(ast * abstree, symbol_table ** st);
+ast * add_child(ast * parent, ast * new_child);
 void free_ast(ast * abstree);
 
 #endif
